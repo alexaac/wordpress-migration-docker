@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+    db:
+        image: mysql:8.0
+        container_name: db
+        restart: unless-stopped
+        env_file: .env
+        environment:
+            - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+            - MYSQL_DATABASE=$DB_NAME
+            - MYSQL_USER=$DB_USER
+            - MYSQL_PASSWORD=$DB_PASSWORD
+        volumes: 
+            - ./database/data:/var/lib/mysql
+            - ./database/initdb.d:/docker-entrypoint-initdb.d
+        command: '--default-authentication-plugin=mysql_native_password'
+        networks:
+            - app-network
+    WordPress:
+        depends_on: 
+            - db
+        image: WordPress:5.1.1-fpm-alpine
+        container_name: WordPress
+        restart: unless-stopped
+        env_file: .env
+        environment:
+            - WordPress_DB_HOST=db:3306
+            - WordPress_DB_USER=$DB_USER
+            - WordPress_DB_PASSWORD=$DB_PASSWORD
+            - WordPress_DB_NAME=$DB_NAME
+        volumes:
+            - ./src:/var/www/html
+        networks:
+            - app-network
+    webserver:
+        depends_on:
+            - WordPress
+        image: nginx:1.15.12-alpine
+        container_name: webserver
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./src:/var/www/html
+            - ./nginx-conf:/etc/nginx/conf.d
+            - certbot-etc:/etc/letsencrypt
+        networks:
+            - app-network
+    certbot:
+        depends_on:
+            - webserver
+        image: certbot/certbot
+        container_name: certbot
+        volumes:
+            - certbot-etc:/etc/letsencrypt
+            - ./src:/var/www/html
+        command: certonly --webroot --webroot-path=/var/www/html --email admin@site1.com --agree-tos --no-eff-email --force-renewal -d site1.com -d www.site1.com
+volumes:
+    certbot-etc:
+networks:
+    app-network:
+        driver: bridge 

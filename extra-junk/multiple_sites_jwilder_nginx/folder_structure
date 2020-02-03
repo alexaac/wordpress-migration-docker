@@ -1,0 +1,18 @@
+Tree Output
+.
+ ├── site1.com
+ │   ├── .dockerignore
+ │   ├── .env
+ │   ├── .gitignore
+ │   ├── database
+ │   ├── docker-compose.yml
+ │   └── src
+ ├── site2.com
+ │   ├── .dockerignore
+ │   ├── .env
+ │   ├── .gitignore
+ │   ├── database
+ │   ├── docker-compose.yml
+ │   └── src
+ └── nginx
+     └── docker-compose.yml

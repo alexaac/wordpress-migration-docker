@@ -1,0 +1,19 @@
+version: '3.7' 
+
+networks:
+    webserver-test:
+
+services:
+
+    my_webserver:
+        image: nginx:1.15.12-alpine
+        container_name: my_webserver
+        restart: unless-stopped
+        ports:
+            - "1234:80"
+        volumes:
+            - my_html:/usr/share/nginx/html
+        networks:
+            - webserver-test
+volumes:
+    my_html:

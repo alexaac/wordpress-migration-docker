@@ -1,0 +1,42 @@
+version: '3.7'
+
+networks:
+    wp-back-myblog:
+
+services:
+    mysql_myblog:
+        container_name: wp_myblog_db
+        image: mysql:5.7
+        volumes:
+            - ./database/data:/var/lib/mysql
+            - ./database/initdb.d:/docker-entrypoint-initdb.d
+        restart: always
+        env_file: .env
+        environment:
+            MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+            MYSQL_DATABASE: $DB_NAME
+            MYSQL_USER: $DB_USER
+            MYSQL_PASSWORD: $DB_PASSWORD
+        networks:
+            - wp-back-myblog
+        command: 
+            --default-authentication-plugin=mysql_native_password
+
+    wp_myblog:
+        container_name: wp_myblog
+        depends_on:
+            - mysql_myblog
+        image: WordPress
+        volumes:
+            - ./src:/var/www/html
+        ports:
+            - 1234:80
+        networks:
+            - wp-back-myblog
+        restart: always
+        env_file: .env
+        environment:
+            WordPress_DB_HOST: mysql_myblog:3306
+            WordPress_DB_NAME: $DB_NAME
+            WordPress_DB_USER: $DB_USER
+            WordPress_DB_PASSWORD: $DB_PASSWORD

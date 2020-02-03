@@ -1,0 +1,17 @@
+
+
+Tree Output
+.
+ └── site1.com
+     ├── .env
+     ├── database
+     │   ├── data
+     │   └── initdb.d
+     │       └── database.sql
+     ├── docker-compose.yml
+     └── src
+         ├── …
+         ├── wp-admin
+         ├── …
+         └── xmlrpc.php
+

@@ -1,0 +1,17 @@
+Tree Output
+
+└── site1.com
+     ├── .dockerignore
+     ├── .env
+     ├── .gitignore
+     ├── database
+     │   ├── data
+     │   └── initdb.d
+     ├── docker-compose.yml
+     ├── nginx-conf
+     │   ├── nginx.conf
+     │   └── options-ssl-nginx.conf
+     └── src
+         ├── …
+         ├── wp-admin
+         └── xmlrpc.php

@@ -1,0 +1,24 @@
+# run in detached mode, pull the needed Docker images, and start the containers
+myuser@host:~/test$ docker-compose up -d
+Creating network "test_webserver-test" with the default driver
+Creating volume "test_my_html" with default driver
+Creating my_webserver ... done
+# list services, watch logs
+myuser@host:~/test$ docker-compose ps
+    Name             Command          State          Ports        
+------------------------------------------------------------------
+my_webserver   nginx -g daemon off;   Up      0.0.0.0:1234->80/tcp
+myuser@host:~/test$ docker-compose logs
+Attaching to my_webserver
+# stop
+myuser@host:~/test$ docker-compose stop
+Stopping my_webserver ... done
+# remove the containers and default network, but preserve your data
+myuser@host:~/test$ docker-compose down
+Removing my_webserver ... done
+Removing network test_webserver-test
+# remove the containers, default network, and the data
+myuser@host:~/test$ docker-compose down --volumes
+Removing network test_webserver-test
+WARNING: Network test_webserver-test not found.
+Removing volume test_my_html

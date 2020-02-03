@@ -1,0 +1,1 @@
+cd local/site1.com; zip -r ../site.zip *
